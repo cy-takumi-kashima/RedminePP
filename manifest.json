@@ -1,10 +1,10 @@
 {
    "name": "Redmine++",
    "manifest_version": 2,
-   "version": "0.0.1",
+   "version": "0.0.2",
    "description": "Redmineを快適に使う拡張",
    "content_scripts": [{
        "matches": [ "http://*/*/issues/new", "https://*/*/issues/new", "http://*/issues/*", "https://*/issues/*"],
-       "js": [ "script.js" ]
+       "js": [ "auto_complete_name.js" ]
     }]
 }

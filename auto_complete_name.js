@@ -79,15 +79,17 @@ var main = function() {
     var isMatch = false;
     for (var i = 0; i < optionList.length; i++) {
 	var assigned = optionList[i];
+        var assignedId = assigned.value;
+        var name = assigned.text;
 	var option = document.createElement('option');
-	option.setAttribute('value', assigned.text);
-	option.setAttribute('text', assigned.value);
+	option.setAttribute('value', name);
+	option.text = assignedId;
 	// 選択ボックスで既に選ばれている人がいる時
 	if (isMatch === false &&
 	    selectbox.value === assigned.value) {
 	    // 検索ボックスと送信ボックスにデータを入れる
-	    searchInput.setAttribute('value', option.value);
-	    sendInput.setAttribute('value', option.text);
+	    searchInput.setAttribute('value', name);
+	    sendInput.setAttribute('value', assignedId);
 	    isMatch = true;
 	}
 	dataList.appendChild(option);
