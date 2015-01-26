@@ -13,6 +13,7 @@ var isRedmine = function() {
     return isRedmine;
 }
 
+// セレクトボックスを検索ボックスに替える
 var updateSearchbox = function() {
     if (document.querySelector('#searchInput')) {
 	return;
@@ -95,6 +96,7 @@ var updateSearchbox = function() {
     baseNode.appendChild(dataList);
 }
 
+// 検索に切り替えるボタンをつける
 var addInsertSearchboxButton = function() {
     var insertButton = document.createElement('img');
     insertButton.setAttribute('src', '/themes/redmine_theme_farend_fancy/images/add.png');
@@ -116,7 +118,8 @@ var main = function() {
     }
 
     console.log('Redmineであることを確認しました');
-
+ 
+    // 検索に切り替えるボタンをつける
     addInsertSearchboxButton();
 }
 
