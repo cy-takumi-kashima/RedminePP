@@ -13,15 +13,11 @@ var isRedmine = function() {
     return isRedmine;
 }
 
-var main = function() {
-    // Redmineではない時はここまで
-    if (!isRedmine()) {
-	console.log('Redmineではありません');
+var updateSearchbox = function() {
+    if (document.querySelector('#searchInput')) {
 	return;
     }
 
-    console.log('Redmineであることを確認しました');
- 
     // optionを連想配列に変換する // nameToId["Takumi Kashima"] = 123;
     var optionList = document.querySelectorAll('#issue_assigned_to_id option');
     var nameToId = {};
@@ -60,6 +56,7 @@ var main = function() {
     searchInput.setAttribute('value', '');
     searchInput.setAttribute('autocomplete', 'on');
     searchInput.setAttribute('list', 'assigned_list');
+    searchInput.setAttribute('id', 'searchInput');
     searchInput.addEventListener('input', function() {
         // 入力された値が正しくなければここまで
         if (!(searchInput.value in nameToId)) {
@@ -86,6 +83,7 @@ var main = function() {
 	option.text = assignedId;
 	// 選択ボックスで既に選ばれている人がいる時
 	if (isMatch === false &&
+	    assigned.value !== '' &&
 	    selectbox.value === assigned.value) {
 	    // 検索ボックスと送信ボックスにデータを入れる
 	    searchInput.setAttribute('value', name);
@@ -95,6 +93,31 @@ var main = function() {
 	dataList.appendChild(option);
     }
     baseNode.appendChild(dataList);
+}
+
+var addInsertSearchboxButton = function() {
+    var insertButton = document.createElement('img');
+    insertButton.setAttribute('src', '/themes/redmine_theme_farend_fancy/images/add.png');
+    insertButton.setAttribute('style', 'vertical-align: middle;');
+    insertButton.addEventListener('click', function(e) {
+        insertButton.parentNode.removeChild(insertButton);
+        updateSearchbox();
+    }, false);
+
+    var selectbox = document.querySelector('#issue_assigned_to_id');
+    selectbox.parentNode.appendChild(insertButton);
+}
+
+var main = function() {
+    // Redmineではない時はここまで
+    if (!isRedmine()) {
+	console.log('Redmineではありません');
+	return;
+    }
+
+    console.log('Redmineであることを確認しました');
+
+    addInsertSearchboxButton();
 }
 
 main();
