@@ -1,3 +1,7 @@
+// ビュー監視のために使うタイマーのIDと回数
+var timerId = null;
+var timerCount = 0;
+
 // Redmineかどうか
 var isRedmine = function() {
     var metaList = document.querySelectorAll('meta');
@@ -105,9 +109,42 @@ var addInsertSearchboxButton = function() {
         insertButton.parentNode.removeChild(insertButton);
         updateSearchbox();
     }, false);
-
+    insertButton.setAttribute('id', 'insert_searchbox_button');
     var selectbox = document.querySelector('#issue_assigned_to_id');
     selectbox.parentNode.appendChild(insertButton);
+}
+
+var updateInsertSearchboxButton = function() {
+    timerCount = 0;
+    timerId = setInterval(function() {
+	    var insertSearchboxButton = document.querySelector('#insert_searchbox_button');
+	    console.log(insertSearchboxButton);
+	    if (timerId && (!insertSearchboxButton || 10 <= timerCount)) {
+		// 検索に切り替えるボタンがなくなったのでつける
+		addInsertSearchboxButton();
+		// タイマーをとめる
+		clearInterval(timerId);
+		timerId = null;
+
+		updateSelectButtonChangeEvent();
+	    }
+	    timerCount += 1;
+    }, 1000);    
+}
+
+// セレクトボックスが更新されるとビューが変わるので対応する    
+var updateSelectButtonChangeEvent = function() {
+    var selectIssueTrackerList = document.querySelectorAll('#issue_tracker_id');
+    for (var i = 0; i < selectIssueTrackerList.length; i++) {
+	var selectIssueTracker = selectIssueTrackerList[i];
+	selectIssueTracker.addEventListener('change', updateInsertSearchboxButton);    
+    }
+
+    var selectIssueStatusList = document.querySelectorAll('#issue_status_id');
+    for (var i = 0; i < selectIssueStatusList.length; i++) {
+	var selectIssueStatus = selectIssueStatusList[i];
+	selectIssueStatus.addEventListener('change', updateInsertSearchboxButton);    
+    }
 }
 
 var main = function() {
@@ -118,6 +155,9 @@ var main = function() {
     }
 
     console.log('Redmineであることを確認しました');
+
+    // セレクトボックスが更新されるとビューが変わるので対応する    
+    updateSelectButtonChangeEvent();
  
     // 検索に切り替えるボタンをつける
     addInsertSearchboxButton();
